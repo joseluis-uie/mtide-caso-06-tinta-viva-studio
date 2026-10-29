@@ -9,9 +9,17 @@ sin_dup as (
     select * from bruto
     qualify row_number() over (partition by cita order by fecha_carga desc) = 1
 ),
+normalizado as (
+    select
+        * exclude (estilo),
+        -- La remesa trae estilos con distintas mayúsculas y espacios.
+        -- Los unificamos antes de calcular la mediana por estilo.
+        lower(replace(trim(estilo), ' ', '_')) as estilo
+    from sin_dup
+),
 mediana_estilo as (
     select estilo, median(minutos::integer) as minutos_mediana
-    from sin_dup
+    from normalizado
     where minutos::integer between 1 and 600
     group by estilo
 )
@@ -29,5 +37,5 @@ select
     s.incidencia,
     s.archivo,
     s.fecha_carga
-from sin_dup s
+from normalizado s
 join mediana_estilo m using (estilo)
