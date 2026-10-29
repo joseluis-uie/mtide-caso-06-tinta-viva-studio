@@ -1,0 +1,47 @@
+
+version: 2
+
+models:
+  - name: dim_tatuador
+    columns:
+      - name: tatuador
+        data_tests: [unique, not_null]
+
+  - name: dim_maquina
+    columns:
+      - name: maquina
+        data_tests: [unique, not_null]
+
+  - name: dim_estilo
+    columns:
+      - name: estilo
+        data_tests: [unique, not_null]
+
+  - name: fact_sesiones
+    columns:
+      - name: cita
+        data_tests: [unique, not_null]
+
+      - name: tatuador
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_tatuador')
+                field: tatuador
+
+      - name: maquina
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_maquina')
+                field: maquina
+
+      - name: estilo
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_estilo')
+                field: estilo
