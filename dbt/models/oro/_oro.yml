@@ -45,3 +45,26 @@ models:
               arguments:
                 to: ref('dim_estilo')
                 field: estilo
+  - name: historia_terreno
+    columns:
+      - name: id
+        data_tests:
+          - unique
+          - not_null
+  - name: historia_incidencias_dia
+    columns:
+      - name: dia
+        data_tests:
+          - unique
+          - not_null
+  - name: historia_contraste
+    columns:
+      - name: maquina
+        data_tests:
+          - unique
+          - not_null
+
+  - name: historia_maquina_semana
+    columns:
+      - name: id
+        data_tests: [unique, not_null]
